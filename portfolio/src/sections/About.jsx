@@ -1,13 +1,13 @@
 export default function About() {
   return (
-    <div className="max-w-4xl mx-auto p-8 min-h-screen flex flex-col justify-center">
-      <h2 className="text-4xl font-bold mb-6">About Me</h2>
-      <p className="text-lg text-gray-700 mb-4">
-        I am Mudassir, a Software Engineer with 4 years of experience in IoT and Desktop Applications, and 1 year in Web Development.
+    <>
+      <h2>About Me</h2>
+      <p>
+        I’m a Software Engineer with a Bachelor’s degree in Software Engineering. I have 4 years of experience working with IoT projects, desktop applications, and recently web development. I enjoy writing clean, efficient code and creating seamless user experiences.
       </p>
-      <p className="text-gray-600 max-w-lg">
-        I enjoy creating minimal, clean, and professional software solutions that prioritize quality and usability.
+      <p>
+        My strengths lie in problem solving, learning new technologies quickly, and attention to detail in both frontend and backend development.
       </p>
-    </div>
+    </>
   );
 }

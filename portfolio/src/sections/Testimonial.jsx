@@ -1,11 +1,15 @@
 export default function Testimonial() {
   return (
-    <div className="max-w-4xl mx-auto p-8 min-h-screen flex flex-col justify-center">
-      <h2 className="text-4xl font-bold mb-6">Testimonials</h2>
-      <blockquote className="italic text-gray-700 mb-6 max-w-lg">
-        “Mudassir is a highly skilled engineer. His attention to detail and professionalism have been invaluable to our projects.”
+    <>
+      <h2>Testimonials</h2>
+      <blockquote>
+        "Mudassir is a dedicated and talented engineer who delivers quality work on time."
+        <footer>— Client A</footer>
       </blockquote>
-      <p className="text-gray-600 font-semibold">— International Client</p>
-    </div>
+      <blockquote>
+        "Great communication and problem-solving skills. Highly recommend Mudassir."
+        <footer>— Client B</footer>
+      </blockquote>
+    </>
   );
 }

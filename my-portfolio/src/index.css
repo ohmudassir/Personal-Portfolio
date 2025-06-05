@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-surface text-onSurface font-sans;
+}
+
+html {
+  scroll-padding-top: 80px; /* or 80px, adjust if you change navbar height */
+  scroll-behavior: smooth;
+}

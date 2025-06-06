@@ -9,24 +9,15 @@ export default function Home() {
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    let fadeTimeout;
-    let cycleTimeout;
-
-    const cycle = () => {
+    const interval = setInterval(() => {
       setFade(true);
-      fadeTimeout = setTimeout(() => {
+      setTimeout(() => {
         setIndex((prev) => (prev + 1) % skills.length);
         setFade(false);
-        cycleTimeout = setTimeout(cycle, 1800); // Continuous loop without pause
-      }, 500); // match with CSS animation duration
-    };
+      }, 500);
+    }, 2000);
 
-    cycle();
-
-    return () => {
-      clearTimeout(fadeTimeout);
-      clearTimeout(cycleTimeout);
-    };
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -39,9 +30,9 @@ export default function Home() {
         alt="Avatar"
         className="w-32 h-32 rounded-full object-cover shadow-material mb-4"
       />
-      <p className="text-lg md:text-xl font-medium text-onSurface mb-1">
-        Hi, I&apos;m <span className="text-primary font-semibold">Mudassir</span> 🤟
-      </p>
+      <h1 className="text-4xl md:text-5xl font-bold text-primary mb-2">
+        Mudassir 👋
+      </h1>
 
       <p className="text-2xl md:text-3xl font-bold text-onSurface mb-1">
         Building modern solutions with
@@ -50,8 +41,8 @@ export default function Home() {
       <p className="text-2xl md:text-3xl font-bold text-primary h-[42px]">
         <span
           className={clsx(
-            "inline-block transition-opacity duration-500",
-            fade ? "opacity-0" : "opacity-100"
+            "inline-block",
+            fade ? "animate-dust" : "animate-appear"
           )}
         >
           {skills[index]}
@@ -60,6 +51,13 @@ export default function Home() {
 
       <a
         href="#contact"
+        onClick={() => {
+          window.dispatchEvent(
+            new CustomEvent("navigate", {
+              detail: { href: "#contact" },
+            })
+          );
+        }}
         className="mt-6 px-6 py-3 bg-primary text-white font-medium rounded-full shadow-material hover:opacity-90 transition"
       >
         Contact Me

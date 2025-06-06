@@ -19,11 +19,22 @@ export default function Navbar() {
     if (open) {
       setAnimate(true);
     } else {
-      // Delay unmount to allow fade-out animation
       const timeout = setTimeout(() => setAnimate(false), 300);
       return () => clearTimeout(timeout);
     }
   }, [open]);
+
+  // Listen for external navigation requests
+  useEffect(() => {
+    const handleExternalNavigation = (e) => {
+      if (e.detail?.href) {
+        setActive(e.detail.href);
+      }
+    };
+
+    window.addEventListener("navigate", handleExternalNavigation);
+    return () => window.removeEventListener("navigate", handleExternalNavigation);
+  }, []);
 
   const handleClick = (href) => {
     setActive(href);
@@ -33,7 +44,7 @@ export default function Navbar() {
   return (
     <nav className="sticky top-4 z-50 max-w-4xl mx-auto px-4">
       <div className="relative px-4 py-5 bg-white/80 backdrop-blur rounded-[40px] shadow-material">
-        {/* Top bar for mobile */}
+        {/* Mobile top bar */}
         <div className="flex justify-between items-center md:hidden">
           <h1 className="text-xl font-semibold text-primary">Menu</h1>
           <button onClick={() => setOpen(!open)} className="text-primary">
@@ -41,10 +52,10 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile menu with animation */}
+        {/* Mobile dropdown */}
         {(open || animate) && (
           <div
-            className={`absolute top-full left-0 w-full mt-2 z-40 px-4 py-3 bg-white/90 backdrop-blur rounded-[30px] shadow-md
+            className={`absolute top-full left-0 w-full mt-2 z-40 px-4 py-3 bg-white/90 backdrop-blur rounded-[30px] shadow-md mx-2
               transform transition-all duration-300 ease-in-out origin-top
               ${open ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"}
             `}

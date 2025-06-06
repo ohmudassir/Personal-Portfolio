@@ -12,28 +12,35 @@ const navItems = [
 export default function Navbar() {
   const [active, setActive] = useState("#home");
   const [open, setOpen] = useState(false);
-  const [animate, setAnimate] = useState(false);
 
-  // Trigger animation on open/close change
   useEffect(() => {
-    if (open) {
-      setAnimate(true);
-    } else {
-      const timeout = setTimeout(() => setAnimate(false), 300);
-      return () => clearTimeout(timeout);
-    }
-  }, [open]);
+    const sections = navItems.map((item) =>
+      document.querySelector(item.href)
+    );
 
-  // Listen for external navigation requests
-  useEffect(() => {
-    const handleExternalNavigation = (e) => {
-      if (e.detail?.href) {
-        setActive(e.detail.href);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`);
+          }
+        });
+      },
+      {
+        rootMargin: "-50% 0px -50% 0px", // triggers when section is near center viewport
+        threshold: 0,
       }
-    };
+    );
 
-    window.addEventListener("navigate", handleExternalNavigation);
-    return () => window.removeEventListener("navigate", handleExternalNavigation);
+    sections.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    return () => {
+      sections.forEach((section) => {
+        if (section) observer.unobserve(section);
+      });
+    };
   }, []);
 
   const handleClick = (href) => {
@@ -47,63 +54,51 @@ export default function Navbar() {
         {/* Mobile top bar */}
         <div className="flex justify-between items-center md:hidden">
           <h1 className="text-xl font-semibold text-primary">Menu</h1>
-          <button onClick={() => setOpen(!open)} className="text-primary">
+          <button
+            onClick={() => setOpen(!open)}
+            className="text-primary"
+            aria-label="Toggle menu"
+          >
             {open ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Mobile dropdown */}
-        {(open || animate) && (
-          <div
-            className={`absolute top-full left-0 w-full mt-2 z-40 px-4 py-3 bg-white/90 backdrop-blur rounded-[30px] shadow-md mx-2
-              transform transition-all duration-300 ease-in-out origin-top
-              ${open ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"}
-            `}
-            style={{ transformOrigin: "top" }}
-          >
+        {/* Mobile menu */}
+        {(open) && (
+          <div className="absolute top-full left-0 w-full mt-2 z-40 px-4 py-3 bg-white/90 backdrop-blur rounded-[30px] shadow-md mx-2">
             <ul>
-              {navItems.map((item) => {
-                const isActive = active === item.href;
-                return (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      onClick={() => handleClick(item.href)}
-                      className={`block w-full px-4 py-3 rounded-full font-medium text-primary transition ${
-                        isActive
-                          ? "bg-primary/10"
-                          : "bg-transparent hover:bg-primary/10"
-                      }`}
-                    >
-                      {item.name}
-                    </a>
-                  </li>
-                );
-              })}
+              {navItems.map(({ href, name }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    onClick={() => handleClick(href)}
+                    className={`block w-full px-4 py-3 rounded-full font-medium text-primary transition ${
+                      active === href ? "bg-primary/10" : "hover:bg-primary/10"
+                    }`}
+                  >
+                    {name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         )}
 
         {/* Desktop menu */}
         <ul className="hidden md:grid grid-cols-5 gap-2 text-center mt-4 md:mt-0">
-          {navItems.map((item) => {
-            const isActive = active === item.href;
-            return (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  onClick={() => handleClick(item.href)}
-                  className={`block w-full px-4 py-3 rounded-full font-medium text-primary transition ${
-                    isActive
-                      ? "bg-primary/10"
-                      : "bg-transparent hover:bg-primary/10"
-                  }`}
-                >
-                  {item.name}
-                </a>
-              </li>
-            );
-          })}
+          {navItems.map(({ href, name }) => (
+            <li key={href}>
+              <a
+                href={href}
+                onClick={() => handleClick(href)}
+                className={`block w-full px-4 py-3 rounded-full font-medium text-primary transition ${
+                  active === href ? "bg-primary/10" : "hover:bg-primary/10"
+                }`}
+              >
+                {name}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
     </nav>

@@ -10,3 +10,12 @@ html {
   scroll-padding-top: 80px; /* or 80px, adjust if you change navbar height */
   scroll-behavior: smooth;
 }
+
+/* index.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

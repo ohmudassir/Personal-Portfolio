@@ -1,9 +1,11 @@
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './sections/Home';
 import About from './sections/About';
 import Work from './sections/Work';
 import Testimonials from './sections/Testimonials';
 import Contact from './sections/Contact';
+import BackToTop from './components/BackToTop';
 
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
       <Work />
       <Testimonials />
       <Contact />
+      <Footer /> {/* 👈 Add Footer at the end */}
+      <BackToTop /> {/* 👈 Add BackToTop button */}
     </div>
   );
 }

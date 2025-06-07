@@ -52,18 +52,12 @@ export default function Home() {
         </p>
 
         <a
-          href="#contact"
-          onClick={() => {
-            window.dispatchEvent(
-              new CustomEvent("navigate", {
-                detail: { href: "#contact" },
-              })
-            );
-          }}
-          className="mt-6 px-6 py-3 bg-primary text-white font-medium rounded-full shadow-material hover:opacity-90 transition"
-        >
-          Contact Me
-        </a>
+  href="/MudassirNadeem.pdf"
+  download
+  className="mt-6 px-6 py-3 bg-primary text-white font-medium rounded-full shadow-material hover:opacity-90 transition"
+>
+  Download CV
+</a>
       </section>
     </FadeInSection>
   );

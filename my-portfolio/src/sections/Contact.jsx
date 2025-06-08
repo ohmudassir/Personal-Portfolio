@@ -1,7 +1,9 @@
 import React from "react";
+import FadeInSection from "../components/FadeInSection";
 
 export default function Contact() {
   return (
+    <FadeInSection>
     <section
       id="contact"
       className="max-w-3xl mx-auto py-16 px-6 scroll-mt-20 animate-appear"
@@ -70,5 +72,6 @@ export default function Contact() {
         </button>
       </form>
     </section>
+    </FadeInSection>
   );
 }

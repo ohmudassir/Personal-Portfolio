@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import FadeInSection from "../components/FadeInSection";
 
 const testimonials = [
   { id: 1, name: "Alice Johnson", role: "Frontend Developer", rating: 5, comment: "This is an excellent service! The UI is clean, modern, and intuitive. I highly recommend it." },
@@ -89,6 +90,7 @@ export default function Testimonials() {
   };
 
   return (
+    <FadeInSection>
     <section id="testimonials" className="max-w-5xl mx-auto py-12 px-6" aria-label="Testimonials Section">
       <h2 className="text-4xl font-bold text-primary mb-10 text-center">Testimonials</h2>
 
@@ -145,5 +147,6 @@ export default function Testimonials() {
         </div>
       )}
     </section>
+    </FadeInSection>
   );
 }

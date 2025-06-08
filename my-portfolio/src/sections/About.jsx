@@ -1,8 +1,10 @@
 import React from "react";
 import aboutImage from "../assets/about.svg"; // replace with your image path
+import FadeInSection from "../components/FadeInSection";
 
 export default function About() {
   return (
+    <FadeInSection>
     <section
       id="about"
       className="min-h-[80vh] flex flex-col items-center justify-center px-6 py-12 max-w-4xl mx-auto"
@@ -28,5 +30,6 @@ export default function About() {
         </div>
       </div>
     </section>
+    </FadeInSection>
   );
 }

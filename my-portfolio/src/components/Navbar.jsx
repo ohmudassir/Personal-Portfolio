@@ -13,6 +13,7 @@ export default function Navbar() {
   const [active, setActive] = useState("#home");
   const [open, setOpen] = useState(false);
 
+  // Active section detection
   useEffect(() => {
     const sections = navItems.map((item) =>
       document.querySelector(item.href)
@@ -27,7 +28,7 @@ export default function Navbar() {
         });
       },
       {
-        rootMargin: "-50% 0px -50% 0px", // triggers when section is near center viewport
+        rootMargin: "-50% 0px -50% 0px",
         threshold: 0,
       }
     );
@@ -42,6 +43,25 @@ export default function Navbar() {
       });
     };
   }, []);
+
+  // ✅ Auto-close menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ✅ Prevent scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [open]);
 
   const handleClick = (href) => {
     setActive(href);
@@ -64,7 +84,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile menu */}
-        {(open) && (
+        {open && (
           <div className="absolute top-full left-0 w-full mt-2 z-40 px-4 py-3 bg-white/90 backdrop-blur rounded-[30px] shadow-md mx-2">
             <ul>
               {navItems.map(({ href, name }) => (

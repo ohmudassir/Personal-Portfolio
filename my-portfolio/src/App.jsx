@@ -12,13 +12,13 @@ export default function App() {
   return (
       <div className="bg-surface min-h-screen px-4 md:px-8 py-6">
       <Navbar />
-      <FadeInSection><Home /></FadeInSection>
-      <FadeInSection><About /></FadeInSection>
-      <FadeInSection><Work /></FadeInSection>
-      <FadeInSection><Testimonials /></FadeInSection>
-      <FadeInSection><Contact /></FadeInSection>
+      <Home />
+      <About />
+      <Work />
+      <Testimonials />
+      <Contact />
       <Footer /> {/* 👈 Add Footer at the end */}
-      <BackToTop /> {/* 👈 Add BackToTop button */}
+      <BackToTop />
      </div>
   );
 }

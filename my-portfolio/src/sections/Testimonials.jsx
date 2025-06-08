@@ -1,38 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const testimonials = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    role: "Frontend Developer",
-    rating: 5,
-    comment:
-      "This is an excellent service! The UI is clean, modern, and intuitive. I highly recommend it.",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    role: "Project Manager",
-    rating: 4,
-    comment:
-      "Very reliable and user-friendly. The smooth scrolling testimonials are a nice touch.",
-  },
-  {
-    id: 3,
-    name: "Cynthia Lee",
-    role: "UX Designer",
-    rating: 5,
-    comment:
-      "I love the attention to detail and the Material You inspired design. It feels premium and consistent.",
-  },
-  {
-    id: 4,
-    name: "David Kim",
-    role: "Full Stack Developer",
-    rating: 4,
-    comment:
-      "Great work! The automatic horizontal scroll helps catch attention without being distracting.",
-  },
+  { id: 1, name: "Alice Johnson", role: "Frontend Developer", rating: 5, comment: "This is an excellent service! The UI is clean, modern, and intuitive. I highly recommend it." },
+  { id: 2, name: "Bob Smith", role: "Project Manager", rating: 4, comment: "Very reliable and user-friendly. The smooth scrolling testimonials are a nice touch." },
+  { id: 3, name: "Cynthia Lee", role: "UX Designer", rating: 5, comment: "I love the attention to detail and the Material You inspired design. It feels premium and consistent." },
+  { id: 4, name: "David Kim", role: "Full Stack Developer", rating: 4, comment: "Great work! The automatic horizontal scroll helps catch attention without being distracting." },
+  { id: 5, name: "Eva Green", role: "Marketing Lead", rating: 5, comment: "Highly professional and prompt. The UI experience is top-notch!" },
 ];
 
 function StarRating({ rating }) {
@@ -57,91 +30,120 @@ function StarRating({ rating }) {
 
 export default function Testimonials() {
   const containerRef = useRef(null);
-  const autoScrollSpeed = 0.5; // Adjust speed here
-  const isUserScrolling = useRef(false);
-  const scrollTimeout = useRef(null);
-  const animationFrameId = useRef(null);
+  const [activePage, setActivePage] = useState(0);
+  const [cardsPerPage, setCardsPerPage] = useState(3);
+  const [pageCount, setPageCount] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Auto-scroll function with smoothness
-  const autoScrollStep = () => {
+  useEffect(() => {
+    function handleResize() {
+      const width = window.innerWidth;
+      const mobileBreakpoint = 768; // Tailwind md breakpoint
+
+      setIsMobile(width < mobileBreakpoint);
+
+      // Cards per page 3 on desktop/tablet, 1 on mobile
+      const newCardsPerPage = width < mobileBreakpoint ? 1 : 3;
+      setCardsPerPage(newCardsPerPage);
+
+      setPageCount(Math.ceil(testimonials.length / newCardsPerPage));
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const scrollToPage = (page) => {
     const container = containerRef.current;
     if (!container) return;
 
-    if (!isUserScrolling.current) {
-      container.scrollLeft += autoScrollSpeed;
+    const card = container.children[0];
+    if (!card) return;
 
-      // Loop scroll
-      if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-        container.scrollLeft = 0;
-      }
-    }
+    const cardStyle = window.getComputedStyle(card);
+    const cardWidth = card.offsetWidth;
+    const marginRight = parseInt(cardStyle.marginRight) || 0;
+    const totalCardWidth = cardWidth + marginRight;
 
-    animationFrameId.current = requestAnimationFrame(autoScrollStep);
+    const scrollLeft = page * cardsPerPage * totalCardWidth;
+    container.scrollTo({ left: scrollLeft, behavior: "smooth" });
+    setActivePage(page);
   };
 
-  useEffect(() => {
-    animationFrameId.current = requestAnimationFrame(autoScrollStep);
+  const handleScroll = () => {
+    const container = containerRef.current;
+    if (!container) return;
 
-    return () => cancelAnimationFrame(animationFrameId.current);
-  }, []);
+    const card = container.children[0];
+    if (!card) return;
 
-  // Handle user manual scroll to pause auto-scroll and resume after timeout
-  const onUserScroll = () => {
-    if (scrollTimeout.current) {
-      clearTimeout(scrollTimeout.current);
-    }
+    const cardStyle = window.getComputedStyle(card);
+    const cardWidth = card.offsetWidth;
+    const marginRight = parseInt(cardStyle.marginRight) || 0;
+    const totalCardWidth = cardWidth + marginRight;
 
-    isUserScrolling.current = true;
-
-    // Resume auto scroll after 2 seconds of inactivity
-    scrollTimeout.current = setTimeout(() => {
-      isUserScrolling.current = false;
-    }, 2000);
+    const scrollLeft = container.scrollLeft;
+    const page = Math.round(scrollLeft / (cardsPerPage * totalCardWidth));
+    setActivePage(page);
   };
 
   return (
-    <section
-      id="testimonials"
-      className="max-w-5xl mx-auto py-12 px-6"
-      aria-label="Testimonials Section"
-    >
+    <section id="testimonials" className="max-w-5xl mx-auto py-12 px-6" aria-label="Testimonials Section">
       <h2 className="text-4xl font-bold text-primary mb-10 text-center">Testimonials</h2>
 
       <div
         ref={containerRef}
-        onScroll={onUserScroll}
-        className="flex space-x-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
+        onScroll={handleScroll}
+        className={`flex overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory`}
         tabIndex={0}
         role="list"
         aria-live="polite"
         aria-label="Testimonials carousel"
-        style={{ scrollBehavior: "smooth" }} // ensure smooth manual scrolling
+        style={{ scrollBehavior: "smooth", gap: "1.5rem" }}
       >
         {testimonials.map(({ id, name, role, rating, comment }) => (
           <article
             key={id}
-            className="flex-shrink-0 snap-center w-80 bg-primary rounded-material p-6 shadow-material hover:shadow-lg transition-shadow duration-300 cursor-default"
+            className={`flex-shrink-0 snap-center bg-primary rounded-material p-6 shadow-material hover:shadow-lg transition-shadow duration-300 cursor-default`}
             role="listitem"
             aria-labelledby={`testimonial-${id}-name`}
             aria-describedby={`testimonial-${id}-comment`}
+            style={{
+              marginRight: "0.5px",
+              width: isMobile ? "78vw" : `calc((100% / 3) - 1rem)`,
+              minWidth: isMobile ? "78vw" : "auto",
+              flexBasis: isMobile ? "78vw" : "auto",
+            }}
           >
             <StarRating rating={rating} />
-            <p
-              id={`testimonial-${id}-comment`}
-              className="mt-4 text-onPrimary text-base font-medium leading-relaxed"
-            >
+            <p id={`testimonial-${id}-comment`} className="mt-4 text-onPrimary text-base font-medium leading-relaxed">
               “{comment}”
             </p>
-            <p
-              id={`testimonial-${id}-name`}
-              className="mt-6 font-semibold text-onPrimary text-lg"
-            >
+            <p id={`testimonial-${id}-name`} className="mt-6 font-semibold text-onPrimary text-lg">
               {name}
             </p>
             <p className="text-sm italic text-onPrimary">{role}</p>
           </article>
         ))}
       </div>
+
+      {/* Show dots only on desktop/tablet */}
+      {!isMobile && (
+        <div className="flex justify-center mt-6 space-x-4">
+          {[...Array(pageCount)].map((_, idx) => (
+            <button
+              key={idx}
+              className={`w-4 h-4 rounded-full transition-colors duration-300 ${
+                idx === activePage ? "bg-primary" : "bg-gray-300"
+              }`}
+              aria-label={`Show testimonials page ${idx + 1}`}
+              aria-current={idx === activePage ? "true" : undefined}
+              onClick={() => scrollToPage(idx)}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

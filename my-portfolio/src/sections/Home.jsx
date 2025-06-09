@@ -3,7 +3,7 @@ import avatar from "../assets/avatar.png";
 import clsx from "clsx";
 import FadeInSection from "../components/FadeInSection";
 
-const skills = ["React", "IoT", "Tkinter"];
+const skills = ["React", "Internet of Things", "Desktop Apps"];
 
 export default function Home() {
   const [index, setIndex] = useState(0);

@@ -9,7 +9,7 @@ export default function Contact() {
       className="max-w-3xl mx-auto py-16 px-6 scroll-mt-20 animate-appear"
       aria-label="Contact Section"
     >
-      <h2 className="text-4xl font-bold text-primary mb-10 text-center">Contact</h2>
+      <h2 className="text-4xl font-bold text-primary mb-10 text-center">Contact (Coming Soon)</h2>
 
       <form
         className="space-y-8"

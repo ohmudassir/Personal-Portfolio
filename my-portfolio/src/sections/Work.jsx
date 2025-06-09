@@ -1,118 +1,12 @@
-import React, { useState } from "react";
-import aboutImage from "../assets/about.svg";
-import solarvideo from "../assets/solar.mp4";
-import videoThumbnail from "../assets/solarThumbnail.svg"; // fallback thumbnail
+import React, { useState, useRef } from "react";
+import projects from "../data/projects";
+import videoThumbnail from "../assets/iot.svg";
 
-const projects = [
-  {
-    name: "Project One",
-    shortDescription: "A React-based web app with Tailwind CSS",
-    description: [
-      {
-        type: "paragraph",
-        content:
-          "Project One is a modern web app built using React and styled with Tailwind CSS. It emphasizes responsive design, component-based architecture, and performance optimization.",
-      },
-      {
-        type: "section",
-        title: "Features",
-        items: [
-          "Fast and responsive UI",
-          "Component-driven architecture",
-          "Reusable styling with Tailwind CSS",
-        ],
-      },
-      {
-        type: "section",
-        title: "Tech Stack",
-        content: "React, Tailwind CSS, Node.js",
-      },
-    ],
-    tech: "React, Tailwind CSS, Node.js",
-    link: "",
-    image: aboutImage,
-    video: "",
-    category: "Web Project",
-  },
-  {
-    name: "Solar Cleaner via Bluetooth",
-    shortDescription: "IoT device monitoring system",
-    description: [
-      {
-        type: "paragraph",
-        content:
-          "Solar Cleaner via Bluetooth is an IoT-based Solar Panel Cleaning System designed to reduce manual effort in maintaining solar panels, particularly in remote or harsh environments.",
-      },
-      {
-        type: "section",
-        title: "Key Features",
-        items: [
-          "Remote cleaning via mobile app using Bluetooth (HC-05)",
-          "Monitors dust level, humidity, and other environmental conditions",
-          "Motor control for brush and water spray",
-          "Real-time feedback on system status",
-          "Logs cleaning sessions, performance metrics, and system health",
-        ],
-      },
-      {
-        type: "section",
-        title: "Methodology",
-        items: [
-          "Secure Bluetooth interface for mobile control",
-          "Arduino-based control unit with integrated sensors",
-          "MQTT protocol for lightweight messaging",
-          "Field-tested under multiple conditions (15m Bluetooth range)",
-        ],
-      },
-      {
-        type: "section",
-        title: "Technologies Used",
-        content:
-          "Python, Arduino, MQTT, Bluetooth (HC-05), Humidity Sensor, Dust Sensor",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Developed over a 3-month period with collaborative hardware and software effort. Deployed in a university lab for live demo. Future improvements include Wi-Fi support and automatic triggering based on sensor thresholds.",
-      },
-    ],
-    tech: "Python, Arduino, MQTT, Bluetooth (HC-05), Humidity Sensor, Dust Sensor",
-    link: "",
-    image: "",
-    video: solarvideo,
-    category: "IoT Project",
-  },
-  {
-    name: "Project Three",
-    shortDescription: "Desktop app built with Tkinter",
-    description: [
-      {
-        type: "paragraph",
-        content:
-          "Project Three is a desktop application built using Python's Tkinter. It features a local SQLite database, clean UI, and simple workflows for daily use.",
-      },
-      {
-        type: "section",
-        title: "Core Capabilities",
-        items: [
-          "User-friendly graphical interface",
-          "Persistent data storage using SQLite",
-          "Built-in validation and input management",
-        ],
-      },
-      {
-        type: "section",
-        title: "Technology Stack",
-        content: "Tkinter, SQLite",
-      },
-    ],
-    tech: "Tkinter, SQLite",
-    link: "",
-    image: "/images/project-three.jpg",
-    video: "",
-    category: "Desktop App",
-  },
-];
+const getThumbnail = (project) => {
+  if (project.image) return project.image;
+  if (project.video) return videoThumbnail;
+  return "/images/placeholder.png";
+};
 
 const renderDescription = (project) => {
   if (!Array.isArray(project.description)) {
@@ -151,19 +45,52 @@ const renderDescription = (project) => {
 
 export default function Work() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [showAllModal, setShowAllModal] = useState(false);
+  const sliderRef = useRef(null);
 
-  const getThumbnail = (project) => {
-    if (project.image) return project.image;
-    if (project.video) return videoThumbnail;
-    return "/images/placeholder.png";
+  const allCategories = ["All", ...new Set(projects.map((p) => p.category))];
+  const filteredProjects =
+    activeCategory === "All"
+      ? projects
+      : projects.filter((p) => p.category === activeCategory);
+
+  const scrollLeft = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: -320, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: 320, behavior: "smooth" });
+    }
   };
 
   return (
     <section id="work" className="min-h-[80vh] px-6 py-12 max-w-5xl mx-auto">
       <h2 className="text-4xl font-bold text-primary mb-10 text-center">Work</h2>
 
+      {/* Category Filter */}
+      <div className="flex flex-wrap justify-center gap-4 mb-10">
+        {allCategories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setActiveCategory(category)}
+            className={`px-4 py-2 rounded-full font-medium border ${
+              activeCategory === category
+                ? "bg-primary text-white"
+                : "bg-surface text-primary border-primary"
+            } transition`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      {/* Projects Grid */}
       <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project, i) => (
+        {filteredProjects.slice(0, 3).map((project, i) => (
           <div
             key={i}
             className="relative cursor-pointer rounded-material overflow-hidden shadow-material hover:shadow-lg transition-shadow duration-300 bg-surface group"
@@ -199,6 +126,93 @@ export default function Work() {
         ))}
       </div>
 
+      {/* View All Button */}
+      {filteredProjects.length > 3 && (
+        <div className="text-center mt-8">
+          <button
+            onClick={() => setShowAllModal(true)}
+            className="px-6 py-2 bg-primary text-white rounded-full font-medium hover:bg-opacity-90 transition"
+          >
+            View All Projects
+          </button>
+        </div>
+      )}
+
+      {/* Modal */}
+      {showAllModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-6"
+          onClick={() => setShowAllModal(false)}
+        >
+          <div
+            className="relative bg-surface rounded-material shadow-xl max-w-7xl w-full p-6 pt-6 flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <header className="flex justify-between items-center mb-6">
+              <h3 className="text-3xl font-bold text-primary">All Projects</h3>
+              <button
+                onClick={() => setShowAllModal(false)}
+                className="text-onSurface text-3xl font-bold hover:text-primary transition"
+                aria-label="Close modal"
+              >
+                &times;
+              </button>
+            </header>
+
+            {/* Scrollable Cards */}
+            <div className="relative w-full">
+              {/* Arrows (hide on mobile) */}
+              <button
+                onClick={scrollLeft}
+                className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 bg-primary text-white rounded-full p-2 shadow-lg hover:bg-primary/80 transition z-10"
+                aria-label="Scroll left"
+              >
+                &#8592;
+              </button>
+
+              <div
+                ref={sliderRef}
+                className="flex overflow-x-auto scrollbar-hide space-x-6 scroll-smooth px-4 snap-x snap-mandatory"
+              >
+                {filteredProjects.map((project, i) => (
+                  <div
+                    key={i}
+                    className="w-[90vw] sm:w-[60vw] md:w-[45vw] lg:w-[320px] flex-shrink-0 bg-surface rounded-material shadow-lg hover:shadow-xl transition-transform duration-300 hover:scale-105 cursor-pointer snap-center"
+                    onClick={() => {
+                      setShowAllModal(false);
+                      setSelectedProject(project);
+                    }}
+                  >
+                    <img
+                      src={getThumbnail(project)}
+                      alt={project.name}
+                      className="w-full h-48 object-cover rounded-t-material"
+                    />
+                    <div className="p-5">
+                      <h4 className="text-xl font-semibold text-primary mb-2">
+                        {project.name}
+                      </h4>
+                      <p className="text-onSurface text-base">
+                        {project.shortDescription}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={scrollRight}
+                className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 bg-primary text-white rounded-full p-2 shadow-lg hover:bg-primary/80 transition z-10"
+                aria-label="Scroll right"
+              >
+                &#8594;
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Project Detail Modal */}
       {selectedProject && (
         <div
           className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4"

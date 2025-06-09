@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import FadeInSection from "../components/FadeInSection";
 
 const testimonials = [
-  { id: 1, name: "Alice Johnson", role: "Frontend Developer", rating: 5, comment: "This is an excellent service! The UI is clean, modern, and intuitive. I highly recommend it." },
-  { id: 2, name: "Bob Smith", role: "Project Manager", rating: 4, comment: "Very reliable and user-friendly. The smooth scrolling testimonials are a nice touch." },
-  { id: 3, name: "Cynthia Lee", role: "UX Designer", rating: 5, comment: "I love the attention to detail and the Material You inspired design. It feels premium and consistent." },
-  { id: 4, name: "David Kim", role: "Full Stack Developer", rating: 4, comment: "Great work! The automatic horizontal scroll helps catch attention without being distracting." },
+  { id: 1, name: "Aljawarah", role: "Frontend Developer", rating: 5, comment: "This is an excellent service! The UI is clean, modern, and intuitive. I highly recommend it." },
+  { id: 2, name: "Sergio", role: "Project Manager", rating: 4, comment: "You're the best in IoT development!" },
+  { id: 3, name: "Hassan", role: "UX Designer", rating: 5, comment: "I love the attention to detail and the Material You inspired design. It feels premium and consistent." },
+  { id: 4, name: "Simal", role: "Full Stack Developer", rating: 4, comment: "Thanks for the great work!" },
   { id: 5, name: "Eva Green", role: "Marketing Lead", rating: 5, comment: "Highly professional and prompt. The UI experience is top-notch!" },
 ];
 

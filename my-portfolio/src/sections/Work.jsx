@@ -19,7 +19,6 @@ const renderDescription = (project) => {
         if (block.type === "paragraph") {
           return <p key={idx}>{block.content}</p>;
         }
-
         if (block.type === "section") {
           return (
             <div key={idx}>
@@ -36,7 +35,6 @@ const renderDescription = (project) => {
             </div>
           );
         }
-
         return null;
       })}
     </div>
@@ -96,14 +94,17 @@ export default function Work() {
             className="relative cursor-pointer rounded-material overflow-hidden shadow-material hover:shadow-lg transition-shadow duration-300 bg-surface group"
             onClick={() => setSelectedProject(project)}
           >
-            <div className="w-full h-48 overflow-hidden">
+            {/* Image with aspect ratio */}
+            <div className="aspect-[16/9] w-full overflow-hidden bg-muted">
               <img
                 src={getThumbnail(project)}
                 alt={project.name}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
               />
             </div>
 
+            {/* Overlay */}
             <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center rounded-material">
               <button
                 onClick={(e) => {
@@ -116,7 +117,8 @@ export default function Work() {
               </button>
             </div>
 
-            <div className="p-4">
+            {/* Text Content */}
+            <div className="p-4 min-h-[100px]">
               <h3 className="text-xl font-semibold text-primary mb-1">
                 {project.name}
               </h3>
@@ -161,7 +163,6 @@ export default function Work() {
 
             {/* Scrollable Cards */}
             <div className="relative w-full">
-              {/* Arrows (hide on mobile) */}
               <button
                 onClick={scrollLeft}
                 className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 bg-primary text-white rounded-full p-2 shadow-lg hover:bg-primary/80 transition z-10"
@@ -186,9 +187,10 @@ export default function Work() {
                     <img
                       src={getThumbnail(project)}
                       alt={project.name}
-                      className="w-full h-48 object-cover rounded-t-material"
+                      className="w-full h-48 object-cover rounded-t-material bg-muted"
+                      loading="lazy"
                     />
-                    <div className="p-5">
+                    <div className="p-5 min-h-[100px]">
                       <h4 className="text-xl font-semibold text-primary mb-2">
                         {project.name}
                       </h4>
@@ -240,7 +242,8 @@ export default function Work() {
               <img
                 src={selectedProject.image}
                 alt={selectedProject.name}
-                className="w-full h-64 object-cover rounded-material mb-4"
+                className="w-full h-64 object-cover rounded-material mb-4 bg-muted"
+                loading="lazy"
               />
             )}
 

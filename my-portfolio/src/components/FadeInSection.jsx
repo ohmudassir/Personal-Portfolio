@@ -1,22 +1,27 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import React, { useRef, useState, useEffect } from "react";
 
 export default function FadeInSection({ children }) {
-  const [ref, inView] = useInView({
-    triggerOnce: false,  // important: allow repeated triggers
-    threshold: 0.2,
-  });
+  const ref = useRef();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.2 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      style={{ willChange: "opacity, transform" }}
+      className={`transition-opacity transform duration-700 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

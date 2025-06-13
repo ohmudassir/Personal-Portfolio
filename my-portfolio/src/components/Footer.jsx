@@ -1,4 +1,6 @@
-import { Github, Linkedin, Mail } from "lucide-react";
+import Github from 'lucide-react/dist/esm/icons/github';
+import Linkedin from 'lucide-react/dist/esm/icons/linkedin';
+import Mail from 'lucide-react/dist/esm/icons/mail';
 
 export default function Footer() {
   return (

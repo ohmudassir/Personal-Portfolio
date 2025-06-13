@@ -14,6 +14,8 @@ export default function About() {
         <div className="md:w-1/2 flex justify-center">
           <img
             src={aboutImage}
+            width={694}
+            height={576}
             alt="About Me"
             className="max-w-xs md:max-w-full object-cover"
           />

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import FadeInSection from "../components/FadeInSection";
 import toast from "react-hot-toast";

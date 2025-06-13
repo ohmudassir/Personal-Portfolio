@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import avatar from "../assets/avatar.png";
+import { useState, useEffect } from "react";
+import avatar from "../assets/avatar.webp";
 import clsx from "clsx";
 import FadeInSection from "../components/FadeInSection";
 

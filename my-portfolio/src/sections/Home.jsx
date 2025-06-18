@@ -36,11 +36,11 @@ export default function Home() {
           Mudassir 👋
         </h1>
 
-        <p className="text-2xl md:text-3xl font-bold text-onSurface mb-1">
+        <h2 className="text-2xl md:text-3xl font-bold text-onSurface mb-1">
           Building modern solutions with
-        </p>
+        </h2>
 
-        <p className="text-2xl md:text-3xl font-bold text-primary h-[42px]">
+        <h2 className="text-2xl md:text-3xl font-bold text-primary h-[42px]">
           <span
             className={clsx(
               "inline-block",
@@ -49,17 +49,16 @@ export default function Home() {
           >
             {skills[index]}
           </span>
-        </p>
+        </h2>
 
         <a
-  href="/MudassirNadeem.pdf"
-  download
-  className="mt-6 px-6 py-3 bg-primary text-white font-medium rounded-full shadow-material hover:opacity-90 transition"
->
-  Download CV
-</a>
+          href="/MudassirNadeem.pdf"
+          download
+          className="mt-6 px-6 py-3 bg-primary text-white font-medium rounded-full shadow-material hover:opacity-90 transition"
+        >
+          Download CV
+        </a>
       </section>
     </FadeInSection>
-    
   );
 }
